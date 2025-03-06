@@ -1,439 +1,64 @@
 #include <iostream>
-
-using namespace std;
-
-// Задание 1: Сумма и произведение элементов массива
-void calculateSumAndProduct(int* arr, int size, int* sum, int* product) 
+int* memoryAllocation(int size)
 {
-    if (arr == nullptr || size <= 0) 
-    {
-        cout << "Ошибка: Некорректный массив или размер." << endl;
-        *sum = 0;
-        *product = 0;
-        return;
-    }
+    int* arr = new int [size];
+    return arr;
+}
+void arrayInitialization(int* arr,int size)
+{
+    std::cout << "Заполните массив: " << std::endl;
 
-    *sum = 0;
-    *product = 1;
-
-    for (int i = 0; i < size; ++i) 
+    for (int i = 0; i < size; i++)
     {
-        *sum += arr[i];
-        *product *= arr[i];
+        
+        std::cin >> arr[i];
+        
     }
 }
-
-
-void countElements(int* arr, int size, int* negatives, int* positives, int* zeros) 
+void arrayPrint(int* arr, int size)
 {
-    if (arr == nullptr || size <= 0) {
-        cout << "Ошибка: Некорректный массив или размер." << endl;
-        *negatives = *positives = *zeros = 0;
-        return;
-    }
-
-    *negatives = *positives = *zeros = 0;
-
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] < 0) {
-            (*negatives)++;
-        } else if (arr[i] > 0) {
-            (*positives)++;
-        } else {
-            (*zeros)++;
-        }
+    std::cout << "Вывод массива " << std::endl;
+    for (int i = 0; i < size; i++)
+    {
+        std::cout << arr[i] << " ";
     }
 }
-
-
-int* findSubarray(int* A, int sizeA, int* B, int sizeB) 
+int* addElement(int* arr,int size)
 {
-    if (A == nullptr || B == nullptr || sizeA <= 0 || sizeB <= 0 || sizeB > sizeA) 
+    int* arr2 = new int[size + 1];
+    for (int i = 0; i < size + 1; i++)
     {
-        cout << "Ошибка: Некорректные массивы или размеры." << endl;
-        return nullptr;
-    }
-
-    for (int i = 0; i <= sizeA - sizeB; ++i) 
-    {
-        bool found = true;
-        for (int j = 0; j < sizeB; ++j) 
+        if (i == 5)
         {
-            if (A[i + j] != B[j]) 
-            {
-                found = false;
-                break;
-            }
+            arr2[i] = 0;
         }
-        if (found) {
-            return A + i; 
-        }
-    }
-
-    return nullptr; 
-}
-
-
-int* removeNegatives(int* arr, int& size) 
-{
-    if (arr == nullptr) 
-    {
-        cout << "Ошибка: Массив не выделен." << endl;
-        return nullptr;
-    }
-
-    int nonNegativesCount = 0;
-    for (int i = 0; i < size; ++i) 
-    {
-        if (arr[i] >= 0) 
+        else
         {
-            nonNegativesCount++;
+            arr2[i] = arr[i];
         }
     }
-
-    if (nonNegativesCount == 0) 
+    for (int i = 0; i < size+1; i++)
     {
-        delete[] arr;
-        size = 0;
-        return nullptr;
+        std::cout << arr2[i] << " ";
     }
-
-    int* newArr = new int[nonNegativesCount];
-    int newIndex = 0;
-    for (int i = 0; i < size; ++i) 
-    {
-        if (arr[i] >= 0) 
-        {
-            newArr[newIndex] = arr[i];
-            newIndex++;
-        }
-    }
-
+    return arr2;
     delete[] arr;
-    size = nonNegativesCount;
-    return newArr;
 }
-
-// Задание 5: Добавление блока элементов в конец массива
-int* appendBlock(int* arr, int& size, int* block, int blockSize) 
+// добавить вставку и удаление элемента по указаному индексу
+void arrayDelete(int* arr)
 {
-    if (arr == nullptr || block == nullptr || blockSize <= 0) 
-    {
-        cout << "Ошибка: Некорректные массивы или размер блока." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size + blockSize];
-    for (int i = 0; i < size; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = 0; i < blockSize; ++i) {
-        newArr[size + i] = block[i];
-    }
-
     delete[] arr;
-    size += blockSize;
-    return newArr;
+}
+int main()
+{
+    setlocale(LC_ALL, "rus");
+    int* arr;
+    int size = 5;
+    
+    arr = memoryAllocation(size);
+    arrayInitialization(arr,size);
+    arrayPrint(arr, size);
+    addElement(arr, size);
+    
 }
 
-// Задание 6: Вставка блока элементов, начиная с произвольного индекса массива
-int* insertBlock(int* arr, int& size, int index, int* block, int blockSize) {
-    if (arr == nullptr || block == nullptr || blockSize <= 0 || index < 0 || index > size) {
-        cout << "Ошибка: Некорректные параметры для вставки." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size + blockSize];
-    for (int i = 0; i < index; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = 0; i < blockSize; ++i) {
-        newArr[index + i] = block[i];
-    }
-    for (int i = index; i < size; ++i) {
-        newArr[index + blockSize + i - index] = arr[i];
-    }
-
-    delete[] arr;
-    size += blockSize;
-    return newArr;
-}
-
-// Задание 7: Удаление блока элементов, начиная с произвольного индекса массива
-int* removeBlock(int* arr, int& size, int index, int blockSize) {
-    if (arr == nullptr || index < 0 || index >= size || blockSize <= 0 || index + blockSize > size) {
-        cout << "Ошибка: Некорректные параметры для удаления." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size - blockSize];
-    for (int i = 0; i < index; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = index + blockSize; i < size; ++i) {
-        newArr[i - blockSize] = arr[i];
-    }
-
-    delete[] arr;
-    size -= blockSize;
-    return newArr;
-}
-
-int main() {
-    // Пример использования функций
-    int arr[] = {1, 2, 3, 4, 5};
-    int size = sizeof(arr) / sizeof(arr[0]);
-
-    int sum, product;
-    calculateSumAndProduct(arr, size, &sum, &product);
-    cout << "Сумма: " << sum << ", Произведение: " << product << endl;
-
-    int negatives, positives, zeros;
-    countElements(arr, size, &negatives, &positives, &zeros);
-    cout << "Отрицательных: " << negatives << ", Положительных: " << positives << ", Нулей: " << zeros << endl;
-
-    int A[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    int sizeA = sizeof(A) / sizeof(A[0]);
-    int B[] = {4, 5, 6};
-    int sizeB = sizeof(B) / sizeof(B[0]);
-    int* subarray = findSubarray(A, sizeA, B, sizeB);
-    if (subarray != nullptr) {
-        cout << "Массив B является подмножеством массива A, начиная с элемента: " << *subarray << endl;
-    } else {
-        cout << "Массив B не является подмножеством массива A." << endl;
-    }
-
-    int* dynamicArr = new int[size];
-    for (int i = 0; i < size; ++i) {
-        dynamicArr[i] = arr[i] - 3;
-    }
-     cout << "Изначальный динамический массив:";
-        for (int i = 0; i < size; ++i) {
-            cout << dynamicArr[i] << " ";
-        }
-        cout << endl;
-
-    dynamicArr = removeNegatives(dynamicArr, size);
-    cout << "После удаления отрицательных чисел: ";
-    if (dynamicArr == nullptr) {
-        cout << "Массив пуст" << endl;
-    } else {
-        for (int i = 0; i < size; ++i) {
-            cout << dynamicArr[i] << " ";
-        }
-        cout << endl;
-        delete[] dynamicArr;
-    }
-
-    return 0;
-}#include <iostream>
-
-using namespace std;
-
-// Задание 1: Сумма и произведение элементов массива
-void calculateSumAndProduct(int* arr, int size, int* sum, int* product) {
-    if (arr == nullptr || size <= 0) {
-        cout << "Ошибка: Некорректный массив или размер." << endl;
-        *sum = 0;
-        *product = 0;
-        return;
-    }
-
-    *sum = 0;
-    *product = 1;
-
-    for (int i = 0; i < size; ++i) {
-        *sum += arr[i];
-        *product *= arr[i];
-    }
-}
-
-// Задание 2: Количество отрицательных, положительных и нулевых элементов
-void countElements(int* arr, int size, int* negatives, int* positives, int* zeros) {
-    if (arr == nullptr || size <= 0) {
-        cout << "Ошибка: Некорректный массив или размер." << endl;
-        *negatives = *positives = *zeros = 0;
-        return;
-    }
-
-    *negatives = *positives = *zeros = 0;
-
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] < 0) {
-            (*negatives)++;
-        } else if (arr[i] > 0) {
-            (*positives)++;
-        } else {
-            (*zeros)++;
-        }
-    }
-}
-
-// Задание 3: Является ли массив B подмножеством массива A
-int* findSubarray(int* A, int sizeA, int* B, int sizeB) {
-    if (A == nullptr || B == nullptr || sizeA <= 0 || sizeB <= 0 || sizeB > sizeA) {
-        cout << "Ошибка: Некорректные массивы или размеры." << endl;
-        return nullptr;
-    }
-
-    for (int i = 0; i <= sizeA - sizeB; ++i) {
-        bool found = true;
-        for (int j = 0; j < sizeB; ++j) {
-            if (A[i + j] != B[j]) {
-                found = false;
-                break;
-            }
-        }
-        if (found) {
-            return A + i; // Возвращаем указатель на начало найденного фрагмента
-        }
-    }
-
-    return nullptr; // B не является подмножеством A
-}
-
-// Задание 4: Удаление отрицательных чисел из динамического массива
-int* removeNegatives(int* arr, int& size) {
-    if (arr == nullptr) {
-        cout << "Ошибка: Массив не выделен." << endl;
-        return nullptr;
-    }
-
-    int nonNegativesCount = 0;
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] >= 0) {
-            nonNegativesCount++;
-        }
-    }
-
-    if (nonNegativesCount == 0) {
-        delete[] arr;
-        size = 0;
-        return nullptr;
-    }
-
-    int* newArr = new int[nonNegativesCount];
-    int newIndex = 0;
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] >= 0) {
-            newArr[newIndex] = arr[i];
-            newIndex++;
-        }
-    }
-
-    delete[] arr;
-    size = nonNegativesCount;
-    return newArr;
-}
-
-// Задание 5: Добавление блока элементов в конец массива
-int* appendBlock(int* arr, int& size, int* block, int blockSize) {
-    if (arr == nullptr || block == nullptr || blockSize <= 0) {
-        cout << "Ошибка: Некорректные массивы или размер блока." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size + blockSize];
-    for (int i = 0; i < size; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = 0; i < blockSize; ++i) {
-        newArr[size + i] = block[i];
-    }
-
-    delete[] arr;
-    size += blockSize;
-    return newArr;
-}
-
-// Задание 6: Вставка блока элементов, начиная с произвольного индекса массива
-int* insertBlock(int* arr, int& size, int index, int* block, int blockSize) {
-    if (arr == nullptr || block == nullptr || blockSize <= 0 || index < 0 || index > size) {
-        cout << "Ошибка: Некорректные параметры для вставки." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size + blockSize];
-    for (int i = 0; i < index; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = 0; i < blockSize; ++i) {
-        newArr[index + i] = block[i];
-    }
-    for (int i = index; i < size; ++i) {
-        newArr[index + blockSize + i - index] = arr[i];
-    }
-
-    delete[] arr;
-    size += blockSize;
-    return newArr;
-}
-
-// Задание 7: Удаление блока элементов, начиная с произвольного индекса массива
-int* removeBlock(int* arr, int& size, int index, int blockSize) {
-    if (arr == nullptr || index < 0 || index >= size || blockSize <= 0 || index + blockSize > size) {
-        cout << "Ошибка: Некорректные параметры для удаления." << endl;
-        return arr; // Или nullptr, в зависимости от требований
-    }
-
-    int* newArr = new int[size - blockSize];
-    for (int i = 0; i < index; ++i) {
-        newArr[i] = arr[i];
-    }
-    for (int i = index + blockSize; i < size; ++i) {
-        newArr[i - blockSize] = arr[i];
-    }
-
-    delete[] arr;
-    size -= blockSize;
-    return newArr;
-}
-
-int main() {
-    // Пример использования функций
-    int arr[] = {1, 2, 3, 4, 5};
-    int size = sizeof(arr) / sizeof(arr[0]);
-
-    int sum, product;
-    calculateSumAndProduct(arr, size, &sum, &product);
-    cout << "Сумма: " << sum << ", Произведение: " << product << endl;
-
-    int negatives, positives, zeros;
-    countElements(arr, size, &negatives, &positives, &zeros);
-    cout << "Отрицательных: " << negatives << ", Положительных: " << positives << ", Нулей: " << zeros << endl;
-
-    int A[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    int sizeA = sizeof(A) / sizeof(A[0]);
-    int B[] = {4, 5, 6};
-    int sizeB = sizeof(B) / sizeof(B[0]);
-    int* subarray = findSubarray(A, sizeA, B, sizeB);
-    if (subarray != nullptr) {
-        cout << "Массив B является подмножеством массива A, начиная с элемента: " << *subarray << endl;
-    } else {
-        cout << "Массив B не является подмножеством массива A." << endl;
-    }
-
-    int* dynamicArr = new int[size];
-    for (int i = 0; i < size; ++i) {
-        dynamicArr[i] = arr[i] - 3;
-    }
-     cout << "Изначальный динамический массив:";
-        for (int i = 0; i < size; ++i) {
-            cout << dynamicArr[i] << " ";
-        }
-        cout << endl;
-
-    dynamicArr = removeNegatives(dynamicArr, size);
-    cout << "После удаления отрицательных чисел: ";
-    if (dynamicArr == nullptr) {
-        cout << "Массив пуст" << endl;
-    } else {
-        for (int i = 0; i < size; ++i) {
-            cout << dynamicArr[i] << " ";
-        }
-        cout << endl;
-        delete[] dynamicArr;
-    }
-
-    return 0;
-}
