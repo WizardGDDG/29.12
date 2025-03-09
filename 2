@@ -1,0 +1,40 @@
+#include <iostream>
+int removingPrimeNumbers(int* arr,int size)
+{
+    int* array = new int[2];
+    int j = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] != 1 and arr[i] % 1 == 0 and arr[i] % arr[i] == 0 and arr[i] % 2 != 0 or arr[i] == 2){}
+        else 
+        {
+            array[j] = arr[i];
+            j++;
+        }
+    }
+    
+    for (int i = 0; i < j; i++)
+    {
+        std::cout << array[i];
+        if (i != j - 1)
+        {
+             std::cout << ", ";
+        }
+        
+    }
+    return 0;
+}
+int main()
+{
+    setlocale(LC_ALL, "rus");
+    int size = 6;
+    int* arr = new int [size] {7,11,14,23,52,4};
+    
+    removingPrimeNumbers(arr, size);
+    
+    
+    
+    
+    
+
+}
