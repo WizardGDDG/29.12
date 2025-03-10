@@ -1,0 +1,84 @@
+#include <iostream>
+
+void distribution(int *arr, int size)
+{
+    int size1 = 0;
+    int size2 = 0;
+    int size3 = 0;
+    int* arrPlus = new int[size1];
+    int* arrMinus = new int[size2];
+    int* arrZero = new int[size3];
+
+    for (int i = 0; i < size; i++)
+    {
+        if (*arr > 0)
+        {
+            
+            size1++;
+            
+        }
+        if (*arr < 0)
+        {
+            
+            size2++;
+            
+        }
+        if (*arr == 0)
+        {
+            
+            size3++;
+            
+        }
+        arr++;
+
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        if (*arr > 0)
+        {
+            *arrPlus = *arr;
+            
+            arrPlus++;
+        }
+        if (*arr < 0)
+        {
+            *arrMinus = *arr;
+            
+            arrMinus++;
+        }
+        if (*arr == 0)
+        {
+            *arrZero = *arr;
+
+            arrZero++;
+        }
+        arr++;
+
+    }
+    // Доделать вывод
+    std::cout << "Массив положительных чисел" << std::endl;
+    for (int i = 0; i < size1; i++)
+    {
+        std::cout << *(arrPlus+i);
+    }
+    std::cout << std::endl << "Массив отрицательных чисел" << std::endl;
+    for (int i = 0; i < size2; i++)
+    {
+        std::cout << *(arrMinus+i);
+    }
+    std::cout << std::endl << "Массив нуля" << std::endl;
+    for (int i = 0; i < size3; i++)
+    {
+        std::cout << (arrZero+i);
+    }
+}
+int main()
+{
+    setlocale(LC_ALL, "rus");
+    const int size = 7;
+    int arr[size] = { 0,1,2,-3,0,-2,5 };
+
+    distribution(arr, size);
+}
+
